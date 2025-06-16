@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockVision Pro - Advanced Stock Analysis with AI Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">StockVision Pro AI</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><button id="contrast-toggle" class="toggle-switch" aria-label="Toggle high contrast mode"></button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="main-content">
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" id="stock-input" class="search-input" placeholder="Enter stock symbol (e.g., AAPL, GOOGL)" aria-label="Stock symbol input">
+                    <button id="search-btn" class="search-btn">Analyze</button>
+                    <button id="compare-btn" class="compare-btn">Compare</button>
+                    <button id="predict-btn" class="predict-btn">🤖 AI Predict</button>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <div class="chart-header">
+                    <div>
+                        <h2 id="stock-title" class="stock-title">Select a stock to analyze</h2>
+                        <div class="stock-info">
+                            <span id="stock-price" class="stock-price">$0.00</span>
+                            <span id="price-change" class="price-change">+0.00%</span>
+                        </div>
+                    </div>
+                    <div id="sentiment-indicator" class="sentiment-indicator">😐</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="stock-chart"></canvas>
+                </div>
+            </div>
+
+            <div id="prediction-section" class="prediction-section">
+                <h3 class="sidebar-title">🤖 AI Price Prediction</h3>
+                <div class="prediction-controls">
+                    <select id="prediction-days" class="prediction-select">
+                        <option value="7">7 Days</option>
+                        <option value="14">14 Days</option>
+                        <option value="30" selected>30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90 Days</option>
+                    </select>
+                    <select id="prediction-model" class="prediction-select">
+                        <option value="lstm">LSTM Neural Network</option>
+                        <option value="linear">Linear Regression</option>
+                        <option value="sma">Moving Average</option>
+                    </select>
+                </div>
+
+                <div class="training-progress" id="training-progress">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Training AI Model...</span>
+                        <span id="training-epoch">Epoch 0/50</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="prediction-results" id="prediction-results">
+                    <!-- Prediction results will be populated here -->
+                </div>
+
+                <div class="confidence-indicator">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>Model Confidence</span>
+                        <span id="confidence-percentage">0%</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidence-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="indicators-section">
+                <h3 class="sidebar-title">Technical Indicators</h3>
+                <div class="indicators-grid">
+                    <div class="indicator-card">
+                        <div class="indicator-name">RSI (14)</div>
+                        <div id="rsi-value" class="indicator-value">--</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">MACD</div>
+                        <div id="macd-value" class="indicator-value">--</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">SMA (20)</div>
+                        <div id="sma-value" class="indicator-value">--</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">Volume</div>
+                        <div id="volume-value" class="indicator-value">--</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <section class="sidebar-section">
+                <h3 class="sidebar-title">Indicator Controls</h3>
+                <div class="toggle-container">
+                    <span>SMA (20)</span>
+                    <div id="sma-toggle" class="toggle-switch active"></div>
+                </div>
+                <div class="toggle-container">
+                    <span>RSI</span>
+                    <div id="rsi-toggle" class="toggle-switch"></div>
+                </div>
+                <div class="toggle-container">
+                    <span>MACD</span>
+                    <div id="macd-toggle" class="toggle-switch"></div>
+                </div>
+                <div class="toggle-container">
+                    <span>Volume</span>
+                    <div id="volume-toggle" class="toggle-switch active"></div>
+                </div>
+                <div class="toggle-container">
+                    <span>Predictions</span>
+                    <div id="prediction-toggle" class="toggle-switch"></div>
+                </div>
+            </section>
+
+            <section class="sidebar-section">
+                <h3 class="sidebar-title">Watchlist</h3>
+                <div id="watchlist" class="watchlist">
+                    <!-- Watchlist items will be populated here -->
+                </div>
+                <button id="add-to-watchlist" class="search-btn" style="width: 100%; margin-top: 1rem;">Add Current Stock</button>
+            </section>
+
+            <section class="sidebar-section">
+                <h3 class="sidebar-title">Latest News</h3>
+                <div id="news-container" class="news-container">
+                    <!-- News items will be populated here -->
+                </div>
+            </section>
+        </aside>
+    </main>
+
+    <footer>
+        <p class="disclaimer">
+            Disclaimer: This application is for educational and informational purposes only.
+            AI predictions are based on historical data and should not be considered as financial advice.
+            Always consult with a qualified financial advisor before making investment decisions.
+            Past performance and AI predictions do not guarantee future results.
+        </p>
+        <p class="author-info">
+            Created by StockVision Pro Team | Powered by Real-Time Financial Data & AI
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
