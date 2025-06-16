@@ -12,7 +12,7 @@ class StockAnalyzer {
         // API Configuration
         this.API_CONFIG = {
             ALPHA_VANTAGE: {
-                key: 'XRCVL3EKHESVCKFY',
+                key: 'RKULLMB89FM1ESY3',
                 baseUrl: 'https://www.alphavantage.co/query'
             },
 
